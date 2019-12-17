@@ -1,77 +1,46 @@
+''' Card Module '''
+from attr_dict import ATTR_DICT
+
 class Card:
-    """A Card Class with standard attributes"""
-    def __init__(self, name: str, health: int, damage: int, mana: int,
-                 tagline=None):
-        self.name = name
-        self.health = health
-        self.damage = damage
-        self.mana = mana
-        if tagline == None:
-            self.tagline = ""
-        else:
-            self.tagline = tagline
+    '''A Card Class with standard attributes'''
+    def __init__(self, init_dict: dict):
+        if not isinstance(init_dict, dict):
+            raise TypeError("Card object must be created with dictionary")
+        self.attributes = {}
+        for key, value in init_dict.items():
+            self.attr_helper(key, value)
 
-    @property
-    def name(self):
-        return self.__name
-
-    @property
-    def health(self):
-        return self.__health
-
-    @property
-    def damage(self):
-        return self.__damage
-
-    @property
-    def mana(self):
-        return self.__mana
-
-    @name.setter
-    def name(self, name):
-        if not isinstance(name, str):
-            raise TypeError("Card name must be string")
-        self.__name = name
-
-    @health.setter
-    def health(self, health):
-        if not isinstance(health, int):
-            raise TypeError("Card health must be int")
-        self.__health = health
-
-    @damage.setter
-    def damage(self, damage):
-        if not isinstance(damage, int):
-            raise TypeError("Card damage must be int")
-        self.__damage = damage
-
-    @mana.setter
-    def mana(self, mana):
-        if not isinstance(mana, int):
-            raise TypeError("Card mana must be int")
-        self.__mana = mana
+    def attr_helper(self, key, value):
+        '''Helper function to check attribute dict has correct types'''
+        if key not in ATTR_DICT.keys():
+            raise TypeError("key in card initialization dict not recognized")
+        if not isinstance(value, ATTR_DICT[key]):
+            raise TypeError("Cannot initialize card. {} must be type {}".format(
+                key, ATTR_DICT[key]))
+        self.attributes[key] = value
 
     def attack(self):
-        """Return the outgoing attack and cost to use"""
-        self.send = self.damage
-        self.cost = self.mana
-        print("{} attacks!".format(self.name))
-        return [self.send, self.cost]
+        '''Return the outgoing attack and cost to use'''
+        send = self.attributes['damage']
+        cost = self.attributes['mana']
+        print("{} attacks!".format(self.attributes['name']))
+        return [send, cost]
 
     def victim(self, receive):
-        """A method that must be called whenever attacked"""
-        self.health = self.health - receive
+        '''A method that must be called whenever attacked'''
+        self.attributes['health'] = self.attributes['health'] - receive
         if not self.alive():
             self.__del__()
 
     def alive(self):
-        """Check to see if I'm still alive"""
-        if self.health < 1:
+        '''Check to see if I'm still alive'''
+        if self.attributes['health'] < 1:
             return False
         return True
 
     def say_tagline(self):
-        print(self.tagline)
+        '''Return tagline'''
+        print(self.attributes['tagline'])
 
     def __del__(self):
-        print("{} has been destroyed".format(self.name))
+        print("{} has been destroyed".format(self.attributes['name']))
