@@ -3,7 +3,7 @@ from Player import Player
 
 
 class PlayArea:
-    """A user's play area to put cards in play"""
+    '''A user's play area to put cards in play'''
 
     def __init__(self, player, deck=None):
         self.player = player

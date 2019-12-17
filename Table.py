@@ -3,7 +3,7 @@ from PlayArea import  PlayArea
 
 
 class Table:
-    """A table to put two Players"""
+    '''A table to put two Players'''
 
     def __init__(self, player_one, player_two):
         self.player_one = player_one
@@ -20,7 +20,7 @@ class Table:
         if not isinstance(player_one, Player):
             raise TypeError("Table player must be Player object")
         self.__player_one = player_one
-    
+
     @property
     def player_two(self):
         return self.__player_two
